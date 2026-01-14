@@ -1,27 +1,123 @@
-<!-- TikTok Pixel Code Start -->
-<script>
-!function (w, d, t) {
-  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
-var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
-;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TikTok Pixel TTQ Test</title>
 
+  <!-- TikTok Pixel Base Code (Custom Code) -->
+  <script>
+    !function (w, d, t) {
+      w.TiktokAnalyticsObject = t;
+      var ttq = w[t] = w[t] || [];
+      ttq.methods = [
+        "page","track","identify","instances","debug","on","off","once","ready",
+        "alias","group","enableCookie","disableCookie","holdConsent",
+        "revokeConsent","grantConsent"
+      ];
+      ttq.setAndDefer = function (t, e) {
+        t[e] = function () { t.push([e].concat([].slice.call(arguments, 0))) };
+      };
+      for (var i = 0; i < ttq.methods.length; i++) ttq.setAndDefer(ttq, ttq.methods[i]);
+      ttq.instance = function (t) {
+        for (var e = ttq._i[t] || [], n = 0; n < ttq.methods.length; n++) ttq.setAndDefer(e, ttq.methods[n]);
+        return e;
+      };
+      ttq.load = function (e, n) {
+        var r = "https://analytics.tiktok.com/i18n/pixel/events.js";
+        ttq._i = ttq._i || {};
+        ttq._i[e] = [];
+        ttq._i[e]._u = r;
+        ttq._t = ttq._t || {};
+        ttq._t[e] = +new Date;
+        ttq._o = ttq._o || {};
+        ttq._o[e] = n || {};
+        var s = d.createElement("script");
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = r + "?sdkid=" + e + "&lib=" + t;
+        var x = d.getElementsByTagName("script")[0];
+        x.parentNode.insertBefore(s, x);
+      };
 
-  ttq.load('D5K1AQJC77U6R4DE2EJ0');
-  ttq.page();
-}(window, document, 'ttq');
-</script>
-<!-- TikTok Pixel Code End -->
+      // Your Pixel ID:
+      ttq.load('D5K1AQJC77U6R4DE2EJ0');
 
-ttq.track('ViewContent', {
-  contents: [
-    {
-      content_id: '301',
-      content_name: 'dress',
-      quantity: 1,
-      price: 8,
+      // Page view:
+      ttq.page();
+    }(window, document, 'ttq');
+  </script>
+</head>
+
+<body style="font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding: 24px;">
+  <h1>TikTok Pixel (ttq) Test Page</h1>
+  <p>Open DevTools Console and TikTok Pixel Helper, then click buttons below to fire events.</p>
+
+  <div style="display:flex; gap:12px; flex-wrap:wrap; margin:16px 0;">
+    <button id="btnViewContent" style="padding:10px 14px;">Fire ViewContent</button>
+    <button id="btnAddToCart" style="padding:10px 14px;">Fire AddToCart</button>
+    <button id="btnPurchase" style="padding:10px 14px;">Fire Purchase</button>
+  </div>
+
+  <pre id="log" style="background:#111; color:#0f0; padding:12px; border-radius:8px; white-space:pre-wrap;"></pre>
+
+  <script>
+    function log(msg) {
+      const el = document.getElementById("log");
+      el.textContent += msg + "\n";
+      console.log(msg);
     }
-  ],
-  content_type: 'product',
-  value: 8.0,
-  currency: 'USD',
-});
+
+    function safeTrack(eventName, payload) {
+      if (!window.ttq || typeof window.ttq.track !== "function") {
+        log("ttq not ready yet. Try again in a second.");
+        return;
+      }
+      window.ttq.track(eventName, payload);
+      log("Sent ttq.track('" + eventName + "', " + JSON.stringify(payload) + ")");
+    }
+
+    document.getElementById("btnViewContent").addEventListener("click", function () {
+      safeTrack("ViewContent", {
+        contents: [{
+          content_id: "301",
+          content_name: "dress",
+          quantity: 1,
+          price: 8
+        }],
+        content_type: "product",
+        value: 8.0,
+        currency: "USD"
+      });
+    });
+
+    document.getElementById("btnAddToCart").addEventListener("click", function () {
+      safeTrack("AddToCart", {
+        contents: [{
+          content_id: "301",
+          content_name: "dress",
+          quantity: 1,
+          price: 8
+        }],
+        content_type: "product",
+        value: 8.0,
+        currency: "USD"
+      });
+    });
+
+    document.getElementById("btnPurchase").addEventListener("click", function () {
+      safeTrack("Purchase", {
+        contents: [{
+          content_id: "301",
+          content_name: "dress",
+          quantity: 1,
+          price: 8
+        }],
+        content_type: "product",
+        value: 8.0,
+        currency: "USD"
+      });
+    });
+  </script>
+</body>
+</html>
