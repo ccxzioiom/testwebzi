@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TikTok Pixel TTQ Test</title>
+  <title>TikTok Pixel TTQ Test (event_id)</title>
 
-  <!-- TikTok Pixel Base Code (Custom Code) -->
+  <!-- TikTok Pixel Base Code -->
   <script>
     !function (w, d, t) {
       w.TiktokAnalyticsObject = t;
@@ -40,10 +40,7 @@
         x.parentNode.insertBefore(s, x);
       };
 
-      // Your Pixel ID:
       ttq.load('D5K1AQJC77U6R4DE2EJ0');
-
-      // Page view:
       ttq.page();
     }(window, document, 'ttq');
   </script>
@@ -51,7 +48,7 @@
 
 <body style="font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding: 24px;">
   <h1>TikTok Pixel (ttq) Test Page</h1>
-  <p>Open DevTools Console and TikTok Pixel Helper, then click buttons below to fire events.</p>
+  <p>Click buttons to fire events (all with event_id = 123456).</p>
 
   <div style="display:flex; gap:12px; flex-wrap:wrap; margin:16px 0;">
     <button id="btnViewContent" style="padding:10px 14px;">Fire ViewContent</button>
@@ -62,6 +59,8 @@
   <pre id="log" style="background:#111; color:#0f0; padding:12px; border-radius:8px; white-space:pre-wrap;"></pre>
 
   <script>
+    const EVENT_ID = "123456";
+
     function log(msg) {
       const el = document.getElementById("log");
       el.textContent += msg + "\n";
@@ -77,8 +76,9 @@
       log("Sent ttq.track('" + eventName + "', " + JSON.stringify(payload) + ")");
     }
 
-    document.getElementById("btnViewContent").addEventListener("click", function () {
-      safeTrack("ViewContent", {
+    function productPayload() {
+      return {
+        event_id: EVENT_ID,
         contents: [{
           content_id: "301",
           content_name: "dress",
@@ -88,35 +88,19 @@
         content_type: "product",
         value: 8.0,
         currency: "USD"
-      });
+      };
+    }
+
+    document.getElementById("btnViewContent").addEventListener("click", function () {
+      safeTrack("ViewContent", productPayload());
     });
 
     document.getElementById("btnAddToCart").addEventListener("click", function () {
-      safeTrack("AddToCart", {
-        contents: [{
-          content_id: "301",
-          content_name: "dress",
-          quantity: 1,
-          price: 8
-        }],
-        content_type: "product",
-        value: 8.0,
-        currency: "USD"
-      });
+      safeTrack("AddToCart", productPayload());
     });
 
     document.getElementById("btnPurchase").addEventListener("click", function () {
-      safeTrack("Purchase", {
-        contents: [{
-          content_id: "301",
-          content_name: "dress",
-          quantity: 1,
-          price: 8
-        }],
-        content_type: "product",
-        value: 8.0,
-        currency: "USD"
-      });
+      safeTrack("Purchase", productPayload());
     });
   </script>
 </body>
